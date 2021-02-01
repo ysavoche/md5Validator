@@ -10,7 +10,7 @@ staging_path = config.get('main', 'staging_path')
 verification_path = config.get('main', "verification_path")
 matcher_skip_extensions = config.get('main', "matcher_skip_extensions").split(',')
 
-print_line_width = 250
+print_line_width = 150
 
 
 def pretty_print_dict(input_dict):
@@ -56,32 +56,43 @@ def calculate_md5(filename):
         return md5_hash.hexdigest()
 
 
-def find_match(staging_dict, verification_dict):
-    match_dict = {}
-    no_match_list = []
-    for v_file, v_md5 in (verification_dict.items()):
+def get_match(initial_found_matches, initial_no_matches_list, base_path_dict, path_to_find_match_dict):
+    for v_file, v_md5 in (base_path_dict.items()):
+        found_matches = initial_found_matches
+        no_match_list = initial_no_matches_list
         match_list = []
-        for s_file, s_md5 in staging_dict.items():
+        for s_file, s_md5 in path_to_find_match_dict.items():
             if s_md5 == v_md5:
                 match_list.append(s_file)
         if len(match_list) > 0:
-            match_dict[v_file] = match_list
+            found_matches[v_file] = match_list
         else:
             no_match_list.append(v_file)
-    print('*' * print_line_width)
-    print('FOUND MATCHES:')
-    print('_' * print_line_width)
-    pretty_print_dict(match_dict)
-    print('*' * print_line_width)
-    if len(no_match_list) > 0:
-        print('*' * print_line_width)
-        print('FILES WITHOUT ANY MATCHES:')
+
+        return found_matches, no_match_list
+
+
+def find_match(staging_dict, verification_dict):
+    global_found_matches_dict = {}
+    global_no_matches_list = []
+    global_found_matches_dict, global_no_matches_list = get_match(global_found_matches_dict, global_no_matches_list, verification_dict, staging_dict)
+    global_found_matches_dict, global_no_matches_list = get_match(global_found_matches_dict, global_no_matches_list, staging_dict, verification_dict)
+    if len(global_found_matches_dict) > 0:
+        print('FOUND MATCHES:')
+        pretty_print_dict(global_found_matches_dict)
         print('_' * print_line_width)
-        pretty_print_list(no_match_list)
+    if len(global_no_matches_list) > 0:
+        print('=' * print_line_width)
+        print('NOT OK! SOME FILES WITHOUT MATCHES!')
+        print('FILES WITHOUT ANY MATCHES:')
+        pretty_print_list(global_no_matches_list)
+        print('=' * print_line_width)
     else:
-        print('*' * print_line_width)
-        print('ALL FILES HAVE MATCHES')
-        print('*' * print_line_width)
+        print('=' * print_line_width)
+        print('Everything is OK!')
+        print('ALL FILES FROM STAGING HAVE MATCHES IN VERIFICATION PATH!')
+        print('AND ALL FILES FROM VERIFICATION HAVE MATCHES IN STAGING PATH!')
+        print('=' * print_line_width)
 
 
 if __name__ == '__main__':
@@ -89,11 +100,10 @@ if __name__ == '__main__':
     staging = build_files_tree(staging_path)
     print("Calculating files under verification path...")
     verification = build_files_tree(verification_path)
-    print('*' * print_line_width)
+    print('=' * print_line_width)
     print('LIST OF FOUND FILES:')
-    print('_' * print_line_width)
     pretty_print_dict(staging)
     pretty_print_dict(verification)
-    print('*' * print_line_width)
+    print('_' * print_line_width)
     find_match(staging, verification)
     quit()
