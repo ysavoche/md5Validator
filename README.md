@@ -46,7 +46,9 @@ QA signed artifacts on infra-web (some final RC build), then artifacts were push
 - you can have multiple subdirectories in staging or verification paths, md5checker will iterate through each file.
 - artifact file names can have different names, but if they have the same MD5, then we treat them as a same file
 - it's possible that one signed artifact is part of different packages on edelivery, so one file can have a couple of matches with the different paths, read the output for details, it can have output like:
-<br>
+
 `FOUND MATCHES:`
-<br>`d:/Downloads/qa_signed\jrio-1.0.1-linux.zip                                 | ['d:/Downloads/pims/staged\\jrio-1.0.1-linux.zip', 'd:/Downloads/pims/staged\\package2\\jrio-1.0.1-linux.zip']`
-<br>`d:/Downloads/qa_signed\TIB_js-jrio_1.1.0_linux_x86_64.zip                   | ['d:/Downloads/pims/staged\\package1\\TIB_js-jrio_1.1.0_linux_x86_64.zip', 'd:/Downloads/pims/staged\\package2\\TIB_js-jrio_1.1.0_linux_x86_64.zip']`
+
+`d:/Downloads/qa_signed\jrio-1.0.1-linux.zip                                 | ['d:/Downloads/pims/staged\\jrio-1.0.1-linux.zip', 'd:/Downloads/pims/staged\\package2\\jrio-1.0.1-linux.zip']`
+
+`d:/Downloads/qa_signed\TIB_js-jrio_1.1.0_linux_x86_64.zip                   | ['d:/Downloads/pims/staged\\package1\\TIB_js-jrio_1.1.0_linux_x86_64.zip', 'd:/Downloads/pims/staged\\package2\\TIB_js-jrio_1.1.0_linux_x86_64.zip']`
