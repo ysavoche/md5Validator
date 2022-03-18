@@ -16,7 +16,7 @@ def print_repeat(line: str):
 
 def pretty_print_dict(input_dict: dict):
     for key, value in input_dict.items():
-        print("{0:150} | {1}".format(str(key), str(value)))
+        print("{0:80} | {1}".format(str(key), str(value)))
 
 
 def pretty_print_list(input_list: list):
