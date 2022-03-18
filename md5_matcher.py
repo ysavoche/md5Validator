@@ -5,6 +5,7 @@ from lib.util import print_repeat
 def find_match(staging_dict, verification_dict):
     if len(staging_dict) > 0:
         if len(verification_dict) > 0:
+            # comparing verification with staging
             print_repeat('=')
             print('LOOKING FOR MATCHES BETWEEN verification_path and staging_path:')
             v_found_matches, v_no_matches = get_match(verification_dict, staging_dict)
@@ -19,6 +20,7 @@ def find_match(staging_dict, verification_dict):
                 print('VERIFICATION PATH is OK!')
                 print('ALL FILES FROM VERIFICATION PATH HAVE MATCHES IN STAGING PATH!')
 
+            # comparing staging with verification
             print_repeat('=')
             print('LOOKING FOR MATCHES BETWEEN staging_path and verification_path:')
             s_found_matches, s_no_matches = get_match(staging_dict, verification_dict)
